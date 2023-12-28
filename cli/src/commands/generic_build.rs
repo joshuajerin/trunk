@@ -18,7 +18,9 @@ use crate::commands::containers::{
     start_postgres,
 };
 use crate::commands::license::{copy_licenses, find_licenses};
+use crate::config::{ExtensionConfiguration, LoadableLibrary};
 use crate::trunk_toml::SystemDependencies;
+use crate::{pg_release_for_version, pg_version_to_str};
 
 #[derive(Error, Debug)]
 #[allow(clippy::enum_variant_names)]
@@ -74,12 +76,14 @@ pub async fn build_generic(
     name: &str,
     extension_name: Option<String>,
     extension_dependencies: Option<Vec<String>>,
-    preload_libraries: Option<Vec<String>>,
     system_dependencies: Option<SystemDependencies>,
     extension_version: &str,
     inclusion_patterns: Vec<glob::Pattern>,
     _task: Task,
     should_test: bool,
+    configurations: Option<Vec<ExtensionConfiguration>>,
+    loadable_libraries: Option<Vec<LoadableLibrary>>,
+    pg_version: u8,
 ) -> Result<(), GenericBuildError> {
     println!("Building with name {}", &name);
     println!("Building with version {}", &extension_version);
@@ -87,6 +91,8 @@ pub async fn build_generic(
     let mut build_args = HashMap::new();
     build_args.insert("EXTENSION_NAME", name);
     build_args.insert("EXTENSION_VERSION", extension_version);
+    build_args.insert("PG_VERSION", pg_version_to_str(pg_version));
+    build_args.insert("PG_RELEASE", pg_release_for_version(pg_version));
 
     let image_name_prefix = "make_builder_".to_string();
 
@@ -107,8 +113,9 @@ pub async fn build_generic(
             .await?;
 
     if should_test {
+        let extension_name = extension_name.as_deref().unwrap_or(name);
         // Check if there are extensions to run
-        run_tests(&docker, &temp_container.id).await?;
+        run_tests(&docker, &temp_container.id, extension_name).await?;
     }
 
     println!("Determining installation files...");
@@ -148,21 +155,27 @@ pub async fn build_generic(
         docker.clone(),
         &temp_container.id,
         output_path,
-        preload_libraries,
         system_dependencies,
         name,
         extension_name,
         extension_version,
         extension_dependencies,
         inclusion_patterns,
+        configurations,
+        loadable_libraries,
+        pg_version,
     )
     .await?;
 
     Ok(())
 }
 
-async fn run_tests(docker: &Docker, container_id: &str) -> anyhow::Result<()> {
-    let Some(project_dir) = locate_makefile(docker, container_id).await? else {
+async fn run_tests(
+    docker: &Docker,
+    container_id: &str,
+    extension_name: &str,
+) -> anyhow::Result<()> {
+    let Some(project_dir) = locate_makefile(docker, container_id, extension_name).await? else {
         println!("Makefile not found!");
         return Ok(());
     };

@@ -5,7 +5,7 @@
 # Trunk
 
 [![version](https://img.shields.io/crates/v/pg-trunk?label=CLI&logo=rust)](https://crates.io/crates/pg-trunk)
-![](https://img.shields.io/badge/Ubuntu_22.x-180%20extensions-orange)
+![](https://img.shields.io/badge/Ubuntu_22.x-193%20extensions-orange)
 [![OSSRank](https://shields.io/endpoint?url=https://ossrank.com/shield/2643)](https://ossrank.com/p/2643)
 [![Slack](https://img.shields.io/badge/%40trunk-community?logo=slack&label=slack)](https://join.slack.com/t/trunk-community/shared_invite/zt-1yiafma92-hFHq2xAN0ukjg_2AsOVvfg)
 
@@ -64,7 +64,7 @@ Publish extensions to the registry, making them available to the Postgres commun
 ```
 
 ### `trunk install`
-Downloads Postgres extensions from the Trunk registry and installs into your environment (only Ubuntu suppot at this time).
+Downloads Postgres extensions from the Trunk registry and installs into your environment (only Ubuntu support at this time).
 
 Supports nested dependencies, e.g. installing `extension_a` will automatically install `extension_b` if required.
 
