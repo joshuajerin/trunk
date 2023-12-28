@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import cx from 'classnames';
 import Image from 'next/image';
 import styles from './hero.module.scss';
-import BgImage from '../../../public/bg_text.png';
+import BgImage from '../../../public/Illustration.png';
 
 export default function Hero() {
   const [showFeedback, setShowFeedback] = useState(false);
@@ -28,7 +28,12 @@ export default function Hero() {
 
   return (
     <div className={styles.container}>
+      <div className = {styles.bg_text}>
+      <p className = {styles.bg_text1}>A Postgres</p>
+      <p className = {styles.bg_text2}>Extension</p><p className = {styles.bg_text3}>Registry</p>
+      </div>
       <div className={styles.installCont}>
+      
         <p className={styles.getTrunk}>Get Trunk</p>
         <div className={styles.installRow}>
           <div
