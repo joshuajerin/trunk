@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import cx from 'classnames';
 import Image from 'next/image';
 import styles from './hero.module.scss';
-import BgImage from '../../../public/Illustration.png';
+import BgImage from '../../../public/middle.png';
 
 export default function Hero() {
   const [showFeedback, setShowFeedback] = useState(false);
@@ -55,9 +55,8 @@ export default function Hero() {
         </p>
       </div>
       <Image
-        style={{ width: '100%', height: '100%' }}
-        width={1000}
-        height={1000}
+        style={{ height: '100%',width:'35%' }}
+        height={900}
         quality={90}
         priority={true}
         className={styles.image}
