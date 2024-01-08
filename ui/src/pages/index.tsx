@@ -7,7 +7,6 @@ import Categories from '../Components/Categories';
 import ExtGrid from '../Components/ExtGrid';
 import { Category, CategoriesForGrid, Extension } from '@/types';
 import Header from '@/Components/Header';
-import Loading from '@/Components/loading';
 
 const REGISTRY_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'https://registry.pgtrunk.io';
@@ -120,10 +119,6 @@ export default function Home({
           content="Trunk is an open-source package installer and registry for PostgreSQL extensions."
         />
       </Head>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <>
           <Header extensions={extensions}></Header>
           <div className={styles.main}>
             <Hero />
@@ -141,8 +136,6 @@ export default function Home({
               />
             </div>
           </div>
-        </>
-      )}
     </div>
   );
 }

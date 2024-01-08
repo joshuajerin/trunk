@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import cx from 'classnames';
 import Image from 'next/image';
 import styles from './hero.module.scss';
-import BgImage from '../../../public/middle.png';
+import BgImage from '../../../public/middle.webp';
 
 export default function Hero() {
   const [showFeedback, setShowFeedback] = useState(false);
